@@ -30,8 +30,12 @@ def preprocess_post(result: List, remove_irrelevant = True) -> List:
     '''
 
     for post in result:
-        post['lang'] = detect(post['title'])
-
+        try:
+            if post['title']:
+                post['lang'] = detect(post['title'])
+        except:
+            post['lang'] = 'es'
+            
     if remove_irrelevant:
         result = list(filter(lambda x: x['lang'] == 'en', result))
 

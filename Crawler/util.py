@@ -12,7 +12,7 @@ LOG_FILE_HANDLER.setFormatter(FORMAT)
 request_log.addHandler(LOG_FILE_HANDLER)
 
 def read_data():
-    with open(os.path.join(ANNOTATION_DIR, 'public_test_acm.json'), 'r') as file:
+    with open(os.path.join(ANNOTATION_DIR, 'test_data.json'), 'r') as file:
         content = file.readlines()
     content = list(map(json.loads, content))
     return content
