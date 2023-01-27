@@ -38,8 +38,6 @@ def get_all_post_in_current_page(page_html: str, first_page=True) -> List[Dict]:
         POST_CLASS = 'SC7lYd'
         sibling = soup.find('div', {'jscontroller' : POST_CLASS})
 
-
-
     result = []    
     while True:
         try:

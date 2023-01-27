@@ -1,7 +1,8 @@
-from util import request
+import request_crawler as req
+from selenium_crawler import sel
 from bs4 import BeautifulSoup
-import logging
 from preprocess import relevant
+import logging
 
 crawler_log = logging.getLogger('Crawler log')
 FORMAT = logging.Formatter('%(levelname)s - %(message)s - %(post_url)s')
@@ -9,16 +10,27 @@ LOG_FILE_HANDLER = logging.FileHandler('../log/crawler.log', mode = 'w+')
 LOG_FILE_HANDLER.setFormatter(FORMAT)
 crawler_log.addHandler(LOG_FILE_HANDLER)
 
-def crawl_context_raw(post):
-    url = post['post_url']
-    response = request(url)
-    return response    
+
+def require_Javascript(context):
+    print(context)
+    return 'JavaScript' in context['heading'] or \
+            'JavaScript' in context['caption'] or \
+            'JavaScript' in context['context']
 
 def crawl_context(post):
+    content = req.get_content(post)
+    context = parse_content(content, post)
+    if require_Javascript(context):
+        content = sel.get_content(post)
+        print(content)
+        context = parse_content(content, post)
+        crawler_log.error('Crawling with Selenium', extra=post)
+    else:
+        crawler_log.error('Crawling with requests', extra=post)
 
-    url = post['post_url']
-    response = request(url)
+    return context
 
+def parse_content(response, post):
     soup = BeautifulSoup(response, 'html.parser')
 
     # Parse heading
@@ -59,6 +71,5 @@ def crawl_context(post):
         'context': context.strip()
     }   
 
-# url = 'https://www.nytimes.com/2019/06/13/us/politics/julian-castro-fox-town-hall.html'
-# post = {'post_url':url}
-# print(crawl_context(post))
+post = {'post_url': 'https://twitter.com/therealendoreti'}
+print(crawl_context(post))
