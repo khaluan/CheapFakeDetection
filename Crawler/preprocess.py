@@ -2,7 +2,7 @@ from os import remove
 from langdetect import detect
 from typing import List
 
-def relevant(context: str, content: str) -> bool:
+def relevant(content: str, context: str) -> bool:
     '''
         Returns : True if the content is relevant to the context
         
@@ -14,8 +14,8 @@ def relevant(context: str, content: str) -> bool:
     '''
     # TODO: Implement semantic comparison or something here, 
     #       For now return True by default
-
-    return True
+    return len(content.split(' ')) > 11
+    # return True
 
 def preprocess_post(result: List, remove_irrelevant = True) -> List:
     '''

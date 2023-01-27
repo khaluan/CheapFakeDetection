@@ -1,12 +1,12 @@
 import logging
+from unittest import result
 from config import *
 from util import read_data, request
 from tqdm import tqdm
 from rev_search import reverse_image_search_try_catch
 from preprocess import preprocess_post
 import json
-
-from crawler import crawl_context
+from crawler import crawl_context_raw
 
 main_log = logging.getLogger('Main log')
 FORMAT = logging.Formatter('%(levelname)s - %(message)s - Post %(i)s - Context %(j)s - %(post_url)s')
@@ -17,11 +17,19 @@ main_log.addHandler(LOG_FILE_HANDLER)
 if __name__ == '__main__':
     data = read_data()
     
+    ################# FOR ERRORS #################################
+    # with open('../log/reverse_full.log', 'r') as file:
+    #     data = file.readlines()
+    # data = list(map(lambda x: x.split('-')[-1].strip(), data))
+    ##################################################################
+    
     # with open('../Output/url_Jan_17(modified_search).txt', 'w+', encoding='utf8') as file:
     #     for datapoint in tqdm(data):
-            
-    #         result = reverse_image_search_try_catch(datapoint['img_local_path'])
-    #         result = preprocess_post(result, remove_irrelevant=False)
+    #         try:
+    #             result = reverse_image_search(datapoint['img_local_path'])
+    #             result = preprocess_post(result, remove_irrelevant=False)
+    #         except:
+    #             pass
     #         file.write(str(result))
     #         file.write('\n')
         

@@ -9,6 +9,11 @@ LOG_FILE_HANDLER = logging.FileHandler('../log/crawler.log', mode = 'w+')
 LOG_FILE_HANDLER.setFormatter(FORMAT)
 crawler_log.addHandler(LOG_FILE_HANDLER)
 
+def crawl_context_raw(post):
+    url = post['post_url']
+    response = request(url)
+    return response    
+
 def crawl_context(post):
 
     url = post['post_url']
@@ -39,8 +44,10 @@ def crawl_context(post):
     content = soup.findAll('p')
     context = ''
     for par in content:
-        if relevant(par.text, context):
-            context += ' ' + par.text
+        sentences = par.text.split('\n')
+        for s in sentences:
+            if relevant(s.strip(), context):
+                context += ' ' + s
 
     if not context:
         crawler_log.error('No content', extra=post)    
