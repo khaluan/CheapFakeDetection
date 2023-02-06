@@ -12,7 +12,7 @@ crawler_log.addHandler(LOG_FILE_HANDLER)
 
 
 def require_Javascript(context):
-    print(context)
+    # print(context)
     return 'JavaScript' in context['heading'] or \
             'JavaScript' in context['caption'] or \
             'JavaScript' in context['context']
@@ -22,7 +22,7 @@ def crawl_context(post):
     context = parse_content(content, post)
     if require_Javascript(context):
         content = sel.get_content(post)
-        print(content)
+        # print(content.encode())
         context = parse_content(content, post)
         crawler_log.error('Crawling with Selenium', extra=post)
     else:
@@ -71,5 +71,9 @@ def parse_content(response, post):
         'context': context.strip()
     }   
 
-post = {'post_url': 'https://twitter.com/therealendoreti'}
-print(crawl_context(post))
+def crawl_context_raw(post):
+    # return req.get_content(post), sel.get_content(post)
+    return req.get_content(post), None
+
+# post = {'post_url': 'https://twitter.com/therealendoreti'}
+# print(crawl_context(post))
